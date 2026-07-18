@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+@theme {
+  /* Couleurs de fond et surfaces */
+  --color-canvas: #F2F4F8;
+  --color-surface: #FFFFFF;
+  --color-surface-raised: #FFFFFF;
+
+  /* Encre / texte */
+  --color-ink: #131A2C;
+  --color-ink-soft: #566078;
+  --color-ink-faint: #93A0B8;
+
+  /* Accent principal — bleu profond premium (fintech senegalaise) */
+  --color-primary: #1B2A4A;
+  --color-primary-light: #2C4470;
+  --color-accent: #3D6BFF;
+  --color-accent-soft: #E8EEFF;
+
+  /* Semantique */
+  --color-cash-in: #17A363;
+  --color-cash-in-soft: #E3F7ED;
+  --color-cash-out: #E5484D;
+  --color-cash-out-soft: #FCE8E8;
+  --color-credit: #8B5CF6;
+  --color-credit-soft: #F1EBFE;
+  --color-warning: #F5A524;
+  --color-warning-soft: #FEF3DE;
+
+  --color-border: #E7EAF1;
+
+  /* Typographie */
+  --font-display: 'Sora', 'Inter', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+  --radius-card: 1.5rem;
+  --radius-card-lg: 1.75rem;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-body);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    overscroll-behavior-y: contain;
+  }
+
+  * {
+    border-color: var(--color-border);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+  .font-mono-num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+  .tap-scale {
+    transition: transform 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+  }
+  .tap-scale:active {
+    transform: scale(0.96);
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
