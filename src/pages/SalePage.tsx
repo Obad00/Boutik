@@ -88,9 +88,36 @@ export function SalePage() {
     }
   }
 
-  async function handlePrint() {
+  async function handlePrintBluetooth() {
     if (!lastOrder || !settings) return;
-    await printer.print(lastOrder, settings.shop_name, settings.address, settings.receipt_footer);
+    if (!printer.isBluetoothSupported) {
+      alert("Web Bluetooth n'est pas disponible sur ce navigateur. Utilisez Chrome ou Edge.");
+      return;
+    }
+    const ok = await printer.printBluetooth(
+      lastOrder,
+      settings.shop_name,
+      settings.address,
+      settings.receipt_footer,
+    );
+    if (!ok) {
+      alert(
+        printer.error ??
+          "L'impression Bluetooth a échoué. Vérifiez que l'imprimante est allumée et que le Bluetooth est activé.",
+      );
+    }
+  }
+
+  async function handlePrintWindow() {
+    if (!lastOrder || !settings) return;
+    try {
+      await printer.printWindow(lastOrder, settings);
+    } catch {
+      alert(
+        printer.error ??
+          "Impossible d'ouvrir la fenetre d'impression.",
+      );
+    }
   }
 
   return (
@@ -128,8 +155,11 @@ export function SalePage() {
             shopName={settings.shop_name}
             address={settings.address}
             footer={settings.receipt_footer}
-            onPrint={handlePrint}
-            isPrinting={printer.isPrinting}
+            onPrintWindow={handlePrintWindow}
+            isPrintingWindow={printer.isPrintingWindow}
+            onPrintBluetooth={handlePrintBluetooth}
+            isPrintingBluetooth={printer.isPrinting}
+            isBluetoothSupported={printer.isBluetoothSupported}
             onDone={() => setReceiptOpen(false)}
           />
         )}

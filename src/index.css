@@ -66,6 +66,119 @@
   }
 }
 
+/* ─── Impression ticket 58mm ────────────────────────────────────────────────
+   Pendant window.print(), masquer toute l'interface et n'afficher que
+   le div#boutik-print-area injecte par printWindow.ts.
+   Les classes bpa-* sont scopees a ce div pour eviter tout conflit.
+──────────────────────────────────────────────────────────────────────────── */
+@media print {
+  @page {
+    size: 58mm auto;
+    margin: 2mm 0;
+  }
+
+  /* Masquer toute l'interface — selecteurs multiples pour couvrir les TPE/WebView */
+  body > *:not(#boutik-print-area),
+  body > *:not(#boutik-print-area) * {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  #boutik-print-area {
+    display: block !important;
+    visibility: visible !important;
+    position: static !important;
+    font-family: 'Courier New', Courier, monospace !important;
+    font-size: 11px !important;
+    width: 52mm !important;     /* 58mm - 2x3mm padding */
+    max-width: 52mm !important;
+    color: #000 !important;
+    background: #fff !important;
+    padding: 2mm 3mm !important;
+    margin: 0 !important;
+  }
+
+  /* Forcer la visibilite de tous les enfants du ticket */
+  #boutik-print-area * {
+    display: revert !important;
+    visibility: visible !important;
+    color: #000 !important;
+    background: transparent !important;
+  }
+
+  #boutik-print-area .bpa-shop-name {
+    font-size: 14px !important;
+    font-weight: bold !important;
+    text-align: center !important;
+    margin-bottom: 1mm !important;
+  }
+
+  #boutik-print-area .bpa-shop-info {
+    font-size: 10px !important;
+    text-align: center !important;
+    margin-bottom: 1mm !important;
+  }
+
+  #boutik-print-area .bpa-divider {
+    display: block !important;
+    border: none !important;
+    border-top: 1px dashed #000 !important;
+    margin: 2mm 0 !important;
+    height: 0 !important;
+  }
+
+  #boutik-print-area .bpa-table {
+    display: table !important;
+    width: 100% !important;
+    border-collapse: collapse !important;
+    table-layout: fixed !important;
+  }
+
+  #boutik-print-area .bpa-table tbody { display: table-row-group !important; }
+  #boutik-print-area .bpa-table tfoot { display: table-footer-group !important; }
+  #boutik-print-area .bpa-table tr   { display: table-row !important; }
+
+  #boutik-print-area .bpa-table td {
+    display: table-cell !important;
+    vertical-align: top !important;
+    padding: 0.5mm 0 !important;
+    font-size: 11px !important;
+    word-break: break-word !important;
+  }
+
+  #boutik-print-area .bpa-item-name  { width: 62% !important; }
+  #boutik-print-area .bpa-item-price {
+    width: 38% !important;
+    text-align: right !important;
+  }
+
+  #boutik-print-area .bpa-total-row td {
+    font-size: 12px !important;
+    font-weight: bold !important;
+    padding-top: 1mm !important;
+  }
+
+  #boutik-print-area .bpa-right { text-align: right !important; }
+
+  #boutik-print-area .bpa-payment-label {
+    font-size: 10px !important;
+    margin-top: 1mm !important;
+  }
+
+  #boutik-print-area .bpa-footer-text {
+    font-size: 10px !important;
+    text-align: center !important;
+    margin-top: 2mm !important;
+  }
+}
+
 @layer utilities {
   .font-display {
     font-family: var(--font-display);

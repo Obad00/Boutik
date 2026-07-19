@@ -1,15 +1,19 @@
-// Générateur de commandes ESC/POS pour imprimante ticket 58mm.
+// Generateur de commandes ESC/POS pour imprimante thermique 58mm.
 import type { Order } from '../../types';
-import { formatFCFA } from '../currency';
 
 const ESC = 0x1b;
-const GS = 0x1d;
+const GS  = 0x1d;
+
+/** Formatage monetaire avec espace simple ASCII (pas d'insecables). */
+function formatAmount(amount: number): string {
+  return Math.round(amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' FCFA';
+}
 
 class EscPosBuilder {
   private bytes: number[] = [];
 
   init(): this {
-    this.bytes.push(ESC, 0x40); // initialise l'imprimante
+    this.bytes.push(ESC, 0x40);
     return this;
   }
 
@@ -30,8 +34,12 @@ class EscPosBuilder {
   }
 
   text(str: string): this {
-    const encoded = new TextEncoder().encode(str);
-    this.bytes.push(...Array.from(encoded));
+    // Encode en Latin-1 (ISO-8859-1) — standard pour les imprimantes thermiques
+    // Les caracteres hors Latin-1 sont remplaces par '?' pour eviter les artefacts
+    for (let i = 0; i < str.length; i++) {
+      const code = str.charCodeAt(i);
+      this.bytes.push(code <= 0xff ? code : 0x3f); // 0x3f = '?'
+    }
     return this;
   }
 
@@ -41,8 +49,8 @@ class EscPosBuilder {
     return this;
   }
 
-  divider(): this {
-    this.line('--------------------------------');
+  divider(width = 32): this {
+    this.line('-'.repeat(width));
     return this;
   }
 
@@ -61,28 +69,47 @@ class EscPosBuilder {
   }
 }
 
-export function buildReceiptBytes(order: Order, shopName: string, address: string, footer?: string): Uint8Array {
+export function buildReceiptBytes(
+  order: Order,
+  shopName: string,
+  address: string,
+  footer?: string,
+): Uint8Array {
   const b = new EscPosBuilder().init();
+
+  // En-tete
   b.align('center').bold(true).doubleSize(true).line(shopName);
   b.doubleSize(false).bold(false);
   b.line(address);
   b.line(new Date(order.created_at).toLocaleString('fr-FR'));
   b.divider();
+
+  // Articles
   b.align('left');
   for (const item of order.items) {
     b.line(`${item.quantity} x ${item.product_name}`);
-    b.align('right').line(formatFCFA(item.unit_price * item.quantity));
+    b.align('right').line(formatAmount(item.unit_price * item.quantity));
     b.align('left');
   }
   b.divider();
-  b.align('right').bold(true).line(`TOTAL: ${formatFCFA(order.total)}`).bold(false);
+
+  // Total
+  b.align('right').bold(true).line(`TOTAL: ${formatAmount(order.total)}`).bold(false);
   b.align('left');
-  b.line(order.payment_mode === 'cash' ? 'Paiement: Comptant' : `Paiement: Crédit (${order.customer_name ?? ''})`);
+
+  // Mode de paiement
+  b.line(
+    order.payment_mode === 'cash'
+      ? 'Paiement: Comptant'
+      : `Paiement: Credit (${order.customer_name ?? ''})`,
+  );
+
+  // Footer optionnel
   if (footer) {
     b.divider();
     b.align('center').line(footer);
   }
-  b.feed(3);
-  b.cut();
+
+  b.feed(3).cut();
   return b.build();
 }
