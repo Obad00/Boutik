@@ -7,3 +7,4 @@ export * from './stock-movement.types';
 export * from './cash-movement.types';
 export * from './credit-payment.types';
 export * from './settings.types';
+export * from './platform-stats.types';

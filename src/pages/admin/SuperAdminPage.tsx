@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ShieldCheck, Plus, Trash2, Copy, Check, ArrowLeft, Store, Pencil, LogOut } from 'lucide-react';
+import { ShieldCheck, Plus, Trash2, Copy, Check, ArrowLeft, Store, Pencil, LogOut, BarChart3, List } from 'lucide-react';
 import { useShopsStore } from '../../store/shopsStore';
 import { CreateShopForm } from '../../components/admin/CreateShopForm';
+import { PlatformStatsPanel } from '../../components/admin/PlatformStatsPanel';
 import { ConfirmDialog } from '../../components/ui/ConfirmDialog';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
@@ -10,12 +11,15 @@ import { superadminAuthService } from '../../services/client';
 import type { Shop } from '../../types';
 
 const UNLOCK_KEY = 'boutik_superadmin_unlocked';
+type Tab = 'shops' | 'stats';
 
 export function SuperAdminPage() {
   const [unlocked, setUnlocked] = useState(() => sessionStorage.getItem(UNLOCK_KEY) === 'true');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
+
+  const [tab, setTab] = useState<Tab>('shops');
 
   const shops = useShopsStore((s) => s.shops);
   const fetchAll = useShopsStore((s) => s.fetchAll);
@@ -109,13 +113,17 @@ export function SuperAdminPage() {
       <div className="max-w-2xl mx-auto flex flex-col gap-5">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="font-display font-bold text-xl">Superadmin — Boutiques</h1>
-            <p className="text-sm text-[var(--color-ink-soft)]">Créez et gérez les boutiques de la plateforme</p>
+            <h1 className="font-display font-bold text-xl">Superadmin</h1>
+            <p className="text-sm text-[var(--color-ink-soft)]">
+              {tab === 'shops' ? 'Créez et gérez les boutiques de la plateforme' : "Vue d'ensemble de toutes les boutiques"}
+            </p>
           </div>
           <div className="flex items-center gap-2">
-            <Button size="sm" icon={<Plus size={16} />} onClick={() => { setEditingShop(null); setFormOpen(true); }}>
-              Nouvelle boutique
-            </Button>
+            {tab === 'shops' && (
+              <Button size="sm" icon={<Plus size={16} />} onClick={() => { setEditingShop(null); setFormOpen(true); }}>
+                Nouvelle boutique
+              </Button>
+            )}
             <button
               onClick={() => setLogoutConfirmOpen(true)}
               className="tap-scale w-9 h-9 rounded-xl bg-[var(--color-cash-out-soft)] text-[var(--color-cash-out)] flex items-center justify-center shrink-0"
@@ -127,7 +135,28 @@ export function SuperAdminPage() {
           </div>
         </div>
 
-        {justCreated && (
+        <div className="flex bg-black/[0.04] rounded-full p-1 text-sm font-semibold self-start">
+          <button
+            onClick={() => setTab('shops')}
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full tap-scale ${
+              tab === 'shops' ? 'bg-white shadow-sm text-[var(--color-ink)]' : 'text-[var(--color-ink-faint)]'
+            }`}
+          >
+            <List size={14} /> Boutiques
+          </button>
+          <button
+            onClick={() => setTab('stats')}
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full tap-scale ${
+              tab === 'stats' ? 'bg-white shadow-sm text-[var(--color-ink)]' : 'text-[var(--color-ink-faint)]'
+            }`}
+          >
+            <BarChart3 size={14} /> Statistiques
+          </button>
+        </div>
+
+        {tab === 'stats' && <PlatformStatsPanel />}
+
+        {tab === 'shops' && justCreated && (
           <div className="bg-[var(--color-cash-in-soft)] rounded-2xl p-4 flex items-center justify-between gap-3">
             <div>
               <p className="font-semibold text-sm text-[var(--color-ink)]">
@@ -144,39 +173,41 @@ export function SuperAdminPage() {
           </div>
         )}
 
-        <div className="flex flex-col gap-2.5">
-          {shops.map((s) => (
-            <div key={s.id} className="flex items-center gap-3 bg-[var(--color-surface)] rounded-2xl p-4 shadow-[0_2px_12px_-4px_rgba(19,26,44,0.08)]">
-              <div className="w-10 h-10 rounded-xl bg-[var(--color-accent-soft)] text-[var(--color-accent)] flex items-center justify-center shrink-0">
-                <Store size={17} />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-semibold text-sm truncate">{s.name}</p>
-                <p className="text-xs text-[var(--color-ink-faint)] truncate">{s.address} · {s.phone}</p>
-              </div>
-              <div className="flex items-center gap-1.5 bg-black/[0.04] rounded-full px-3 py-1.5 shrink-0">
-                <span className="font-mono-num font-semibold text-xs">{s.code}</span>
-                <button onClick={() => handleCopy(s.code)} className="tap-scale text-[var(--color-ink-faint)]">
-                  <Copy size={12} />
+        {tab === 'shops' && (
+          <div className="flex flex-col gap-2.5">
+            {shops.map((s) => (
+              <div key={s.id} className="flex items-center gap-3 bg-[var(--color-surface)] rounded-2xl p-4 shadow-[0_2px_12px_-4px_rgba(19,26,44,0.08)]">
+                <div className="w-10 h-10 rounded-xl bg-[var(--color-accent-soft)] text-[var(--color-accent)] flex items-center justify-center shrink-0">
+                  <Store size={17} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-semibold text-sm truncate">{s.name}</p>
+                  <p className="text-xs text-[var(--color-ink-faint)] truncate">{s.address} · {s.phone}</p>
+                </div>
+                <div className="flex items-center gap-1.5 bg-black/[0.04] rounded-full px-3 py-1.5 shrink-0">
+                  <span className="font-mono-num font-semibold text-xs">{s.code}</span>
+                  <button onClick={() => handleCopy(s.code)} className="tap-scale text-[var(--color-ink-faint)]">
+                    <Copy size={12} />
+                  </button>
+                </div>
+                <button
+                  onClick={() => { setEditingShop(s); setFormOpen(true); }}
+                  className="tap-scale w-8 h-8 rounded-full bg-[var(--color-accent-soft)] text-[var(--color-accent)] flex items-center justify-center shrink-0"
+                  aria-label="Modifier la boutique"
+                >
+                  <Pencil size={14} />
+                </button>
+                <button
+                  onClick={() => setDeleteTarget(s)}
+                  className="tap-scale w-8 h-8 rounded-full bg-[var(--color-cash-out-soft)] text-[var(--color-cash-out)] flex items-center justify-center shrink-0"
+                  aria-label="Supprimer la boutique"
+                >
+                  <Trash2 size={14} />
                 </button>
               </div>
-              <button
-                onClick={() => { setEditingShop(s); setFormOpen(true); }}
-                className="tap-scale w-8 h-8 rounded-full bg-[var(--color-accent-soft)] text-[var(--color-accent)] flex items-center justify-center shrink-0"
-                aria-label="Modifier la boutique"
-              >
-                <Pencil size={14} />
-              </button>
-              <button
-                onClick={() => setDeleteTarget(s)}
-                className="tap-scale w-8 h-8 rounded-full bg-[var(--color-cash-out-soft)] text-[var(--color-cash-out)] flex items-center justify-center shrink-0"
-                aria-label="Supprimer la boutique"
-              >
-                <Trash2 size={14} />
-              </button>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         <CreateShopForm
           open={formOpen}
