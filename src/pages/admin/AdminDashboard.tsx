@@ -3,6 +3,7 @@ import { Outlet, NavLink, useLocation } from 'react-router-dom';
 import { Lock, Package, Tags, Users, Settings as SettingsIcon } from 'lucide-react';
 import { useShop } from '../../hooks/useShop';
 import { useSettingsStore } from '../../store/settingsStore';
+import { authService } from '../../services/client';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
 
@@ -17,7 +18,6 @@ const sections = [
 
 export function AdminDashboard() {
   const { shop_id } = useShop();
-  const settings = useSettingsStore((s) => s.settings);
   const fetchSettings = useSettingsStore((s) => s.fetch);
   const location = useLocation();
 
@@ -29,8 +29,9 @@ export function AdminDashboard() {
     if (shop_id) fetchSettings(shop_id);
   }, [shop_id, fetchSettings]);
 
-  function handleUnlock() {
-    if (settings && pin === settings.admin_pin) {
+  async function handleUnlock() {
+    const valid = await authService.verifyAdminPin(pin);
+    if (valid) {
       sessionStorage.setItem(ADMIN_UNLOCK_KEY, 'true');
       setUnlocked(true);
       setError(false);

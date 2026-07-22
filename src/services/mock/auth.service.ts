@@ -33,6 +33,13 @@ class MockAuthService implements IAuthService {
     sessionStorage.removeItem(SESSION_KEY);
   }
 
+  async verifyAdminPin(pin: string): Promise<boolean> {
+    const session = this.getSession();
+    if (!session) return false;
+    const settings = db.settings.find((s) => s.shop_id === session.shop.id);
+    return settings?.admin_pin === pin;
+  }
+
   private persist(session: AuthSession) {
     sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
   }

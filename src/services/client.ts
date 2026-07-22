@@ -1,19 +1,19 @@
 // Point d'entrée unique de la couche data.
-// Aujourd'hui : implémentations mock en mémoire.
-// Demain : remplacer chaque import ci-dessous par l'équivalent dans ./supabase/*
-// sans toucher aux composants, hooks ou stores qui consomment ces services.
+// Implémentations api/* qui appellent le backend Laravel via fetch — voir api/http.ts
+// pour la configuration de l'URL de base et de l'authentification par token.
 
-export { productsService } from './mock/products.service';
-export { categoriesService } from './mock/categories.service';
-export { customersService } from './mock/customers.service';
-export { ordersService } from './mock/orders.service';
-export { stockMovementsService } from './mock/stock-movements.service';
-export { cashMovementsService } from './mock/cash-movements.service';
-export { creditPaymentsService } from './mock/credit-payments.service';
-export { settingsService } from './mock/settings.service';
-export { authService } from './mock/auth.service';
-export { shopsService } from './mock/shops.service';
+export { productsService } from './api/products.service';
+export { categoriesService } from './api/categories.service';
+export { customersService } from './api/customers.service';
+export { ordersService } from './api/orders.service';
+export { stockMovementsService } from './api/stock-movements.service';
+export { cashMovementsService } from './api/cash-movements.service';
+export { creditPaymentsService } from './api/credit-payments.service';
+export { settingsService } from './api/settings.service';
+export { authService } from './api/auth.service';
+export { shopsService } from './api/shops.service';
+export { superadminAuthService } from './api/superadmin-auth.service';
 
-// Codes de démonstration pré-créés (voir services/mock/db.ts).
+// Codes de démonstration pré-créés (voir boutik-backend-laravel/database/seeders/DemoDataSeeder.php).
 // De nouvelles boutiques créées par le superadmin viennent s'ajouter dynamiquement.
 export const AVAILABLE_DEMO_CODES = ['SANDAGA', 'THIES'];

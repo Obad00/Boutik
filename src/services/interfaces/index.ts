@@ -8,3 +8,4 @@ export * from './ICreditPaymentsService';
 export * from './ISettingsService';
 export * from './IAuthService';
 export * from './IShopsService';
+export * from './ISuperadminAuthService';

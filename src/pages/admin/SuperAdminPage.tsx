@@ -6,14 +6,15 @@ import { CreateShopForm } from '../../components/admin/CreateShopForm';
 import { ConfirmDialog } from '../../components/ui/ConfirmDialog';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
-import { PLATFORM_CONFIG } from '../../services/mock/db';
+import { superadminAuthService } from '../../services/client';
 import type { Shop } from '../../types';
 
 const UNLOCK_KEY = 'boutik_superadmin_unlocked';
 
 export function SuperAdminPage() {
   const [unlocked, setUnlocked] = useState(() => sessionStorage.getItem(UNLOCK_KEY) === 'true');
-  const [pin, setPin] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState(false);
 
   const shops = useShopsStore((s) => s.shops);
@@ -33,8 +34,9 @@ export function SuperAdminPage() {
     if (unlocked) fetchAll();
   }, [unlocked, fetchAll]);
 
-  function handleUnlock() {
-    if (pin === PLATFORM_CONFIG.superadmin_pin) {
+  async function handleUnlock() {
+    const session = await superadminAuthService.login(email, password);
+    if (session) {
       sessionStorage.setItem(UNLOCK_KEY, 'true');
       setUnlocked(true);
       setError(false);
@@ -44,9 +46,11 @@ export function SuperAdminPage() {
   }
 
   function handleLogout() {
+    superadminAuthService.logout();
     sessionStorage.removeItem(UNLOCK_KEY);
     setUnlocked(false);
-    setPin('');
+    setEmail('');
+    setPassword('');
     setLogoutConfirmOpen(false);
   }
 
@@ -68,19 +72,28 @@ export function SuperAdminPage() {
             <p className="text-sm text-[var(--color-ink-soft)]">Réservé à l'opérateur de la plateforme Boutik</p>
           </div>
           <Input
-            type="password"
-            inputMode="numeric"
-            placeholder="Code PIN superadmin"
-            value={pin}
+            type="email"
+            placeholder="Email"
+            value={email}
             onChange={(e) => {
-              setPin(e.target.value);
+              setEmail(e.target.value);
               setError(false);
             }}
-            className="text-center tracking-widest"
+            className="text-center"
             autoFocus
           />
-          {error && <p className="text-sm text-[var(--color-cash-out)]">Code incorrect</p>}
-          <Button fullWidth onClick={handleUnlock} disabled={!pin}>
+          <Input
+            type="password"
+            placeholder="Mot de passe"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setError(false);
+            }}
+            className="text-center"
+          />
+          {error && <p className="text-sm text-[var(--color-cash-out)]">Identifiants incorrects</p>}
+          <Button fullWidth onClick={handleUnlock} disabled={!email || !password}>
             Déverrouiller
           </Button>
           <Link to="/login" className="text-xs text-[var(--color-ink-faint)] flex items-center gap-1 mt-1">
