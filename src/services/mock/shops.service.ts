@@ -20,6 +20,7 @@ class MockShopsService implements IShopsService {
       name: input.name,
       address: input.address,
       phone: input.phone,
+      is_active: true,
       created_at: nowISO(),
     };
     db.shops.push(shop);
@@ -63,13 +64,18 @@ class MockShopsService implements IShopsService {
     return Object.entries(db.shopCodes).find(([, id]) => id === shop_id)?.[0];
   }
 
-  async remove(shop_id: string): Promise<void> {
+  async deactivate(shop_id: string): Promise<void> {
     await delay();
-    const idx = db.shops.findIndex((s) => s.id === shop_id);
-    if (idx >= 0) db.shops.splice(idx, 1);
-    for (const code of Object.keys(db.shopCodes)) {
-      if (db.shopCodes[code] === shop_id) delete db.shopCodes[code];
-    }
+    const shop = db.shops.find((s) => s.id === shop_id);
+    if (shop) shop.is_active = false;
+  }
+
+  async reactivate(shop_id: string): Promise<Shop> {
+    await delay();
+    const shop = db.shops.find((s) => s.id === shop_id);
+    if (!shop) throw new Error('Boutique introuvable');
+    shop.is_active = true;
+    return shop;
   }
 }
 

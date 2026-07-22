@@ -3,6 +3,7 @@ export interface Shop {
   name: string;
   address: string;
   phone: string;
+  is_active: boolean;
   created_at: string;
 }
 

@@ -38,8 +38,12 @@ export function PlatformStatsPanel() {
   }
 
   return (
-    <div className="flex flex-col gap-3">
-      <PlatformKpiCards overview={stats.overview} />
+    <div className="flex flex-col gap-5">
+      <PlatformKpiCards
+        overview={stats.overview}
+        neverSoldCount={stats.rankings.shops_never_sold.length}
+        inactive14dCount={stats.rankings.shops_inactive_14d.length}
+      />
       <PlatformTrendCharts trends={stats.trends} />
       <ShopRankingTable rankings={stats.rankings} />
       <NeverSoldShopsCard shops={stats.rankings.shops_never_sold} />

@@ -41,7 +41,7 @@ export function PlatformTrendCharts({ trends }: { trends: PlatformStatsTrends })
   const newShopsData = trends.new_shops_by_month.map((r) => ({ label: formatMonthLabel(r.month), value: r.count }));
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
       <Card>
         <div className="flex items-center justify-between mb-3">
           <p className="font-display font-semibold text-sm">Chiffre d'affaires</p>
@@ -95,7 +95,7 @@ export function PlatformTrendCharts({ trends }: { trends: PlatformStatsTrends })
 
       <Card>
         <p className="font-display font-semibold text-sm mb-3">Nouvelles boutiques par mois</p>
-        <div className="h-40 -ml-2">
+        <div className="h-48 -ml-2">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={newShopsData} margin={{ top: 4, right: 8, bottom: 0, left: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke={gridStroke} vertical={false} />

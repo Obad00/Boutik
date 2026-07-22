@@ -14,7 +14,3 @@ export { authService } from './api/auth.service';
 export { shopsService } from './api/shops.service';
 export { superadminAuthService } from './api/superadmin-auth.service';
 export { platformStatsService } from './api/platform-stats.service';
-
-// Codes de démonstration pré-créés (voir boutik-backend-laravel/database/seeders/DemoDataSeeder.php).
-// De nouvelles boutiques créées par le superadmin viennent s'ajouter dynamiquement.
-export const AVAILABLE_DEMO_CODES = ['SANDAGA', 'THIES'];

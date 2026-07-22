@@ -14,7 +14,8 @@ interface ShopsState {
   fetchAll: () => Promise<void>;
   createShop: (input: CreateShopInput) => Promise<{ shop: Shop; code: string }>;
   updateShop: (shop_id: string, input: Partial<CreateShopInput>) => Promise<void>;
-  removeShop: (shop_id: string) => Promise<void>;
+  deactivateShop: (shop_id: string) => Promise<void>;
+  reactivateShop: (shop_id: string) => Promise<void>;
 }
 
 export const useShopsStore = create<ShopsState>((set, get) => ({
@@ -43,8 +44,13 @@ export const useShopsStore = create<ShopsState>((set, get) => ({
     await get().fetchAll();
   },
 
-  removeShop: async (shop_id) => {
-    await shopsService.remove(shop_id);
+  deactivateShop: async (shop_id) => {
+    await shopsService.deactivate(shop_id);
+    await get().fetchAll();
+  },
+
+  reactivateShop: async (shop_id) => {
+    await shopsService.reactivate(shop_id);
     await get().fetchAll();
   },
 }));

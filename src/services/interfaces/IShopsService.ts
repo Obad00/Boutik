@@ -16,5 +16,7 @@ export interface IShopsService {
   create(input: CreateShopInput): Promise<CreatedShop>;
   update(shop_id: string, input: Partial<CreateShopInput>): Promise<Shop>;
   getCode(shop_id: string): Promise<string | undefined>;
-  remove(shop_id: string): Promise<void>;
+  /** Désactivation logique (le code d'accès cesse de fonctionner, les données sont conservées) — pas une suppression. */
+  deactivate(shop_id: string): Promise<void>;
+  reactivate(shop_id: string): Promise<Shop>;
 }

@@ -28,8 +28,12 @@ class ApiShopsService implements IShopsService {
     return withCode.find((s) => s.id === shop_id)?.code;
   }
 
-  async remove(shop_id: string): Promise<void> {
+  async deactivate(shop_id: string): Promise<void> {
     await apiFetch<{ ok: true }>(`/superadmin/shops/${shop_id}`, { method: 'DELETE', scope: 'superadmin' });
+  }
+
+  async reactivate(shop_id: string): Promise<Shop> {
+    return apiFetch<Shop>(`/superadmin/shops/${shop_id}/reactivate`, { method: 'POST', scope: 'superadmin' });
   }
 }
 

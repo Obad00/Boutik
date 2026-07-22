@@ -4,7 +4,6 @@ import { Store, ArrowRight } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { useAuthStore } from '../store/authStore';
-import { AVAILABLE_DEMO_CODES } from '../services/client';
 
 export function LoginPage() {
   const [code, setCode] = useState('');
@@ -43,10 +42,6 @@ export function LoginPage() {
           <Button type="submit" size="lg" fullWidth disabled={isLoading || !code.trim()} icon={<ArrowRight size={18} />}>
             {isLoading ? 'Connexion…' : 'Se connecter'}
           </Button>
-          <p className="text-xs text-[var(--color-ink-faint)] text-center">
-            Démo : essayez le code <span className="font-mono-num font-semibold">{AVAILABLE_DEMO_CODES[0]}</span> ou{' '}
-            <span className="font-mono-num font-semibold">{AVAILABLE_DEMO_CODES[1]}</span>
-          </p>
         </form>
 
         <Link to="/superadmin" className="block text-center text-xs text-white/40 mt-5">
