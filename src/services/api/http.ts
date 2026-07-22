@@ -3,7 +3,8 @@
 // pour que les stores existants (qui font déjà try/catch autour des appels aux
 // services) continuent de fonctionner sans changement.
 
-const API_URL = (import.meta.env.VITE_API_URL as string | undefined) ?? 'http://localhost:8000/api';
+// const API_URL = (import.meta.env.VITE_API_URL as string | undefined) ?? 'http://localhost:8000/api';
+const API_URL = (import.meta.env.VITE_API_URL as string | undefined) ?? 'http://boutik.meblo.cloud/api';
 
 export type AuthScope = 'shop' | 'superadmin' | 'none';
 
