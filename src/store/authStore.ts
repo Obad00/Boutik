@@ -4,6 +4,7 @@ import { authService } from '../services/client';
 
 interface AuthState {
   session: AuthSession | null;
+  isInitializing: boolean;
   isLoading: boolean;
   error: string | null;
   init: () => void;
@@ -13,12 +14,18 @@ interface AuthState {
 
 export const useAuthStore = create<AuthState>((set) => ({
   session: null,
+  // Vrai jusqu'à ce que init() ait relu sessionStorage — RequireAuth doit
+  // attendre ça avant de décider de rediriger vers /login, sinon le premier
+  // rendu (session encore null) redirige avant que init() n'ait tourné
+  // (useEffect s'exécute après le commit, et l'effet interne de <Navigate>
+  // se déclenche avant celui d'App car il est plus profond dans l'arbre).
+  isInitializing: true,
   isLoading: false,
   error: null,
 
   init: () => {
     const session = authService.getSession();
-    if (session) set({ session });
+    set({ session, isInitializing: false });
   },
 
   login: async (shopCode: string) => {

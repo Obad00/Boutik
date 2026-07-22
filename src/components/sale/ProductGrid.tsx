@@ -10,7 +10,7 @@ interface Props {
 
 export function ProductGrid({ products, onAdd }: Props) {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3">
+    <div className="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-3">
       {products.map((p) => {
         const outOfStock = p.stock_quantity <= 0;
         const low = !outOfStock && p.stock_quantity <= p.stock_alert_threshold;

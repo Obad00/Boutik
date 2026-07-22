@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Store, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { useAuthStore } from '../store/authStore';
@@ -23,7 +23,7 @@ export function LoginPage() {
       <div className="w-full max-w-sm">
         <div className="flex flex-col items-center text-center mb-8">
           <div className="w-16 h-16 rounded-3xl bg-white/10 flex items-center justify-center mb-5">
-            <Store size={28} className="text-white" />
+            <img src="/icons/boutik-icon-monochrome.svg" alt="" className="w-8 h-8" />
           </div>
           <h1 className="font-display font-extrabold text-3xl text-white">Boutik</h1>
           <p className="text-white/60 mt-2 text-sm">La caisse et la gestion de votre boutique, simplement.</p>

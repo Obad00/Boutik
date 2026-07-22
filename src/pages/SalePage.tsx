@@ -129,7 +129,7 @@ export function SalePage() {
           <ProductGrid products={filtered} onAdd={(p) => addProduct(p, 1)} />
         </div>
 
-        <div className="hidden md:block w-[340px] shrink-0 sticky top-6 self-start bg-[var(--color-surface)] rounded-[var(--radius-card-lg)] shadow-[0_8px_30px_-8px_rgba(19,26,44,0.18)] p-5 h-[calc(100vh-3rem)]">
+        <div className="hidden lg:block w-[340px] shrink-0 sticky top-6 self-start bg-[var(--color-surface)] rounded-[var(--radius-card-lg)] shadow-[0_8px_30px_-8px_rgba(19,26,44,0.18)] p-5 h-[calc(100vh-3rem)]">
           <h2 className="font-display font-bold text-lg mb-4">Panier</h2>
           <div className="h-[calc(100%-2.5rem)]">
             <Cart onCheckout={() => setPaymentOpen(true)} />

@@ -13,7 +13,7 @@ const items = [
 
 export function BottomNav() {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-[var(--color-surface)]/95 backdrop-blur-md border-t border-[var(--color-border)] safe-bottom md:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-[var(--color-surface)]/95 backdrop-blur-md border-t border-[var(--color-border)] safe-bottom lg:hidden">
       <div className="flex items-stretch justify-around">
         {items.map((item) => {
           const Icon = ICONS[item.icon];

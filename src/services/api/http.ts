@@ -49,6 +49,14 @@ export async function apiFetch<T>(path: string, options: ApiFetchOptions = {}): 
   const json = text ? JSON.parse(text) : null;
 
   if (!res.ok) {
+    // Token boutique rejeté par le backend (expiré, révoqué...) : le state
+    // local pense encore être authentifié tant que rien ne le corrige. On
+    // notifie via un event plutôt qu'un import direct du store (éviterait
+    // un cycle d'imports http.ts -> authStore -> services/client -> http.ts)
+    // — App.tsx écoute cet event et déclenche le vrai logout().
+    if (res.status === 401 && scope === 'shop') {
+      window.dispatchEvent(new Event('boutik:shop-unauthorized'));
+    }
     throw new Error(json?.error ?? 'Une erreur est survenue');
   }
 

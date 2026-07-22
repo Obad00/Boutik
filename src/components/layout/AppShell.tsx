@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
-import { Settings, Store, LogOut } from 'lucide-react';
+import { Settings, LogOut } from 'lucide-react';
 import { Sidebar } from './Sidebar';
 import { BottomNav } from './BottomNav';
 import { useShop } from '../../hooks/useShop';
@@ -17,10 +17,10 @@ export function AppShell() {
     <div className="min-h-screen flex bg-[var(--color-canvas)]">
       <Sidebar />
       <div className="flex-1 min-w-0 flex flex-col">
-        <header className="md:hidden sticky top-0 z-30 flex items-center justify-between px-4 pt-[max(env(safe-area-inset-top),1rem)] pb-3 bg-[var(--color-canvas)]/90 backdrop-blur-md">
+        <header className="lg:hidden sticky top-0 z-30 flex items-center justify-between px-4 pt-[max(env(safe-area-inset-top),1rem)] pb-3 bg-[var(--color-canvas)]/90 backdrop-blur-md">
           <div className="flex items-center gap-2.5 min-w-0">
             <div className="w-9 h-9 rounded-xl bg-[var(--color-primary)] text-white flex items-center justify-center shrink-0">
-              <Store size={16} />
+              <img src="/icons/boutik-icon-monochrome.svg" alt="" className="w-4 h-4" />
             </div>
             <p className="font-display font-bold truncate">{shop?.name ?? 'Boutik'}</p>
           </div>
@@ -42,7 +42,7 @@ export function AppShell() {
           </div>
         </header>
 
-        <main className="flex-1 pb-24 md:pb-8">
+        <main className="flex-1 pb-24 lg:pb-8">
           <Outlet />
         </main>
 

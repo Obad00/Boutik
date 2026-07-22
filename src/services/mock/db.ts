@@ -110,8 +110,8 @@ const customersB: Customer[] = [
 
 export const db: Database = {
   shops: [
-    { id: SHOP_A, name: 'Boutik Sandaga', address: 'Marché Sandaga, Dakar', phone: '33 821 00 00', created_at: nowISO() },
-    { id: SHOP_B, name: 'Boutik Thiès Centre', address: 'Avenue Général de Gaulle, Thiès', phone: '33 951 00 00', created_at: nowISO() },
+    { id: SHOP_A, name: 'Boutik Sandaga', address: 'Marché Sandaga, Dakar', phone: '33 821 00 00', is_active: true, created_at: nowISO() },
+    { id: SHOP_B, name: 'Boutik Thiès Centre', address: 'Avenue Général de Gaulle, Thiès', phone: '33 951 00 00', is_active: true, created_at: nowISO() },
   ],
   categories: [
     { id: catA.boissons, shop_id: SHOP_A, name: 'Boissons' },

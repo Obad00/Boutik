@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icons/icon-192.png', 'icons/icon-512.png'],
+      includeAssets: ['icons/boutik-icon-512.svg', 'icons/boutik-icon-maskable-512.svg', 'icons/boutik-icon-monochrome.svg'],
       manifest: false, // manifest.json is hand-written in /public
       workbox: {
         globPatterns: ['**/*.{js,css,html,png,svg,ico}'],

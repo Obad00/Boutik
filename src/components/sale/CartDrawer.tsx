@@ -24,7 +24,7 @@ export function CartDrawer({
       {!open && (
         <button
           onClick={() => onOpenChange(true)}
-          className="md:hidden tap-scale fixed bottom-[5.5rem] left-4 right-4 z-30 bg-[var(--color-primary)] text-white rounded-2xl px-5 py-4 shadow-xl flex items-center justify-between"
+          className="lg:hidden tap-scale fixed bottom-[5.5rem] left-4 right-4 z-30 bg-[var(--color-primary)] text-white rounded-2xl px-5 py-4 shadow-xl flex items-center justify-between"
         >
           <span className="flex items-center gap-2 font-semibold text-sm">
             <ShoppingBag size={18} />
@@ -33,7 +33,7 @@ export function CartDrawer({
           <span className="font-mono-num font-bold">{formatFCFA(total)}</span>
         </button>
       )}
-      <div className="md:hidden">
+      <div className="lg:hidden">
         <Modal open={open} onClose={() => onOpenChange(false)} title="Panier">
           <div className="h-[60vh]">
             <Cart
